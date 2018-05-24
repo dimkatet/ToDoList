@@ -20,6 +20,7 @@ void Read(FILE *of, Note *Notes)
 		j = 12;
 		y = 0;
 		o = 0;
+		Notes[i].n_metadata = i;
 		StringData = new char[617];
 		StringData = AllData[i];
 		Notes[i].n_data.tm_min = (StringData[2]-48)*10 + StringData[3] - 48;
