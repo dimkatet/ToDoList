@@ -3,7 +3,7 @@
 #include "write.hpp"
 #include "read.hpp"
 #include "testing.hpp"
-
+#include "edit.hpp"
 struct test_write: TestCase{
 	void run(){
 		Note *Notes = new Note [2];
@@ -76,3 +76,28 @@ struct test_read_corr: TestCase{
 	}
 };
 REGISTER_TEST(test_read_corr, "Read file correct");
+
+struct test_clean: TestCase{
+	void run(){
+		Note *Notes = new Note [10];
+	Clean(Notes,10);
+	for(int i = 0; i < 10; i++)
+		ASSERT_EQUAL(0, Notes[i].n_text[0].t_metadata);
+	}
+};
+REGISTER_TEST(test_clean, "clean data");
+
+struct test_transfer: TestCase{
+	void run(){
+		Note *NotesM = new Note [10], *NotesD = new Note [6];
+	for(int i = 0; i < 5; i++){
+		NotesD[i].n_metadata = i+2;
+		NotesD[i].n_text[0].t_metadata = i+3;
+	}
+	Transfer(NotesM,NotesD);
+	for(int i = 0; i < 5; i++)
+		ASSERT_EQUAL(NotesM[i+2].n_text[0].t_metadata, NotesD[i].n_text[0].t_metadata);
+	}
+};
+REGISTER_TEST(test_transfer, "trasder data");
+
