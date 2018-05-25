@@ -80,8 +80,8 @@ REGISTER_TEST(test_read_corr, "Read file correct");
 struct test_clean: TestCase{
 	void run(){
 		Note *Notes = new Note [10];
-	Clean(Notes,10);
-	for(int i = 0; i < 10; i++)
+		Clean(Notes,10);
+		for(int i = 0; i < 10; i++)
 		ASSERT_EQUAL(0, Notes[i].n_text[0].t_metadata);
 	}
 };
@@ -90,14 +90,28 @@ REGISTER_TEST(test_clean, "clean data");
 struct test_transfer: TestCase{
 	void run(){
 		Note *NotesM = new Note [10], *NotesD = new Note [6];
-	for(int i = 0; i < 5; i++){
+		for(int i = 0; i < 5; i++){
 		NotesD[i].n_metadata = i+2;
 		NotesD[i].n_text[0].t_metadata = i+3;
-	}
-	Transfer(NotesM,NotesD);
-	for(int i = 0; i < 5; i++)
+		}
+		Transfer(NotesM,NotesD);
+		for(int i = 0; i < 5; i++)
 		ASSERT_EQUAL(NotesM[i+2].n_text[0].t_metadata, NotesD[i].n_text[0].t_metadata);
 	}
 };
 REGISTER_TEST(test_transfer, "trasder data");
+
+struct test_delete: TestCase{
+	void run(){
+		Note *NotesM = new Note [10], NotesD;
+		for(int i = 0; i < 10; i++){
+		NotesM[i].n_metadata = i;
+		NotesM[i].n_text[0].t_metadata = i+3;
+		}
+		NotesD.n_metadata = 4;
+		DeleteNote(NotesM,NotesD,10);
+		ASSERT_EQUAL(12, NotesM[4].n_text[0].t_metadata);
+	}
+};
+REGISTER_TEST(test_delete, "delete note");
 
