@@ -1,5 +1,5 @@
-#include <sdafx.hpp>
-#include <score.hpp>
+#include "sdafx.hpp"
+#include "score.hpp"
 void ScoreTask(Note *Notes, Note *NotesDay, int *num, int data)
 {
 	int i = 0;
