@@ -9,5 +9,4 @@ void Openfile (int mon, int year, FILE **list0)
 	p[11] = year%10 + 48;
 	p[16] = '\0';
 	*list0 = fopen(p,"r");
-	printf("%s\n",p);
 }
