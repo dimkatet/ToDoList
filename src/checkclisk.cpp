@@ -51,12 +51,23 @@ void nowdate(int *nowday, int *xmonth)
 	*nowday = st.wDay;
 	*xmonth = st.wMonth - 1;
 }
-int counterp(Note p)
+int nday(int month,int *maxday)
 {
-	int i = 0;
-	while (p.n_text[i].t_metadata != 0)
+	switch (month)
 	{
-		i++;
+	case 0: *maxday = 31;	return 0;
+	case 1: *maxday = 28;	return 3;
+	case 2:	*maxday = 31;	return 3;
+	case 3: *maxday = 30;	return 6;
+	case 4: *maxday = 31;	return 1;
+	case 5: *maxday = 30;	return 4;
+	case 6: *maxday = 31;	return 6;
+	case 7: *maxday = 31;	return 2;
+	case 8: *maxday = 30;	return 5;
+	case 9: *maxday = 31;	return 0;
+	case 10: *maxday = 30;	return 3;
+	case 11: *maxday = 31;	return 5;
+	default:	return 0;
 	}
-	return i;
-}
+	return 0;
+} 

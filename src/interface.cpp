@@ -11,10 +11,18 @@ int main()
 {
 	struct Note *NotesDay = new Note [10], *NotesMonth = new Note [300];
 	int nowMonth = 0, year = 2018, day, maxday, nowday; 
+	int matrday[7][8];
+	char ch;
 	FILE *data = 0;
-	int x0=0,y0=0,flag=0,pole = 0,namdertask = 1, help1,ntask,ntaskp,i = 1, k,help, help1;
+	int x0=0,y0=0,flag=0,pole = 0,namdertask = 1, help1,ntask,ntaskp,i = 1, k,help, help1, m, flag3 = 0, flag4 = 0, flag5 = 0, helpi = 0, hp = 0, hpp = 0;
 	float x, y, x1, y1;
 	RenderWindow window(VideoMode(1300, 700), "To-do");
+	nowdate(&nowday, &xmonth);
+	day = nday(xmonth, &maxday);
+	Openfile(xmonth,god,&data);
+	Read(data, NotesMonth);
+	ScoreTaskMonth(NotesMonth,&mtask);
+	ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
 	
 	Image fon;
 	fon.loadFromFile("../image/fon.jpg");
@@ -68,10 +76,13 @@ int main()
 	Sprite zaplatsprite;
 	zaplatsprite.setTexture(zaplattexture);
 	zaplatsprite.setTextureRect(IntRect(0, 0,70,50));
+	x = (float)((nowday+day-1)%7), y = (float)((nowday+day-1) / 7);
+	zaplatsprite.setPosition(110 + x * 70, 275 + y * 50);
+	x1 = 110 + x * 70; y1 = 275 + y * 50;
 	
 	Font font;
 	font.loadFromFile("font.ttf");
-
+	help1 = 0;
 	while (window.isOpen())
 	{	flag = 0; x0 = 0; y0 = 0; help = 0;
 		while (window.pollEvent(event))
@@ -87,217 +98,286 @@ int main()
 				y0 = (float)pikspos.y;
 			}
 			if (!pole)
-		{
-			x = (float)((nowday + day - 1) % 7), y = (float)((nowday + day - 1) / 7);
-			zaplatsprite.setPosition(110 + x * 70, 275 + y * 50);
-			flag = checkstart(x0, y0);
-			if (flag == 1)
 			{
-				Transfer(NotesMonth,NotesDay);
-				Print(data,NotesMonth,nowMonth,year);
-				if (nowMonth == 0) { nowMonth = 11;	year--; }
-				else  nowMonth--;
-				for (int i = 0; i < 301; i += 3)
+				x = (float)((nowday + day - 1) % 7), y = (float)((nowday + day - 1) / 7);
+				zaplatsprite.setPosition(110 + x * 70, 275 + y * 50);
+				flag = checkstart(x0, y0);
+				if (flag == 1)
 				{
-					messprite.setTextureRect(IntRect(nowMonth * 300 + 600 - i, 0, 300, 60));
-					window.draw(messprite);
-					window.display();
-					Sleep(1);
-				}
-				day = nday(nowMonth, &maxday);
-				nowday = checkday((int)x1, (int)y1, day);
-				if ((nowday < 1) || (nowday > maxday))
-				{
-					help1 = nowday = 1;
-					x1 = (float)((nowday + day - 1) % 7), y1 = (float)((nowday + day - 1) / 7);
-					zaplatsprite.setPosition(110 + x1 * 70, 275 + y1 * 50);
-					x1 = 110 + x1 * 70; y1 = 275 + y1 * 50;
-				}
-				Openfile(nowMonth,year,&data);
-				Clean(NotesMonth,100);
-				Clean(NotesDay,10);
-				Read(data, NotesMonth);
-				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
-				if (ntask==0) Clean(NotesDay,10);
-			}
-			if (flag == 2)
-			{
-				Transfer(NotesMonth,NotesDay);
-				Print(data,NotesMonth,nowMonth,year);
-				nowMonth++;
-				year += nowMonth / 12;
-				nowMonth = nowMonth % 12;
-				for (int i = 0; i < 301; i += 3)
-				{
-					messprite.setTextureRect(IntRect(nowMonth * 300 + i, 0, 300, 60));
-					window.draw(messprite);
-					window.display();
-					Sleep(1);
-				}
-				day = nday(nowMonth, &maxday);
-				nowday = checkday((int)x1, (int)y1, day);
-				if ((nowday < 1) || (nowday > maxday))
-				{
-					help1 = nowday = 1;
-					x1 = (float)((nowday + day - 1) % 7), y1 = (float)((nowday + day - 1) / 7);
-					zaplatsprite.setPosition(110 + x1 * 70, 275 + y1 * 50);
-					x1 = 110 + x1 * 70; y1 = 275 + y1 * 50;
-				}
-				Openfile(nowMonth,year,&data);
-				Clean(NotesMonth,100);
-				Clean(NotesDay,10);
-				Read(data, NotesMonth);
-				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
-				if(ntask==0) Clean(NotesDay,10);
-			}
-			if (flag == 3)
-			{
-				nowday = checkday((int)x0, (int)y0, day);
-				if ((nowday < 1) || (nowday > maxday)) nowday = checkday((int)x1, (int)y1, day);
-				else
-				{
-					x0 = (float)((nowday + day - 1) % 7), y0 = (float)((nowday + day - 1) / 7);
-					zaplatsprite.setPosition(110 + x0 * 70, 275 + y0 * 50);
-					x1 = 110 + x0 * 70; y1 = 275 + y0 * 50;
-					if (help1 == nowday)
+					Transfer(NotesMonth,NotesDay);
+					Print(data,NotesMonth,nowMonth,year);
+					if (nowMonth == 0) { nowMonth = 11;	year--; }
+					else  nowMonth--;
+					for (int i = 0; i < 301; i += 3)
 					{
-						pole = 1;
+						messprite.setTextureRect(IntRect(nowMonth * 300 + 600 - i, 0, 300, 60));
+						window.draw(messprite);
+						window.display();
+						Sleep(1);
+					}
+					day = nday(nowMonth, &maxday);
+					nowday = checkday((int)x1, (int)y1, day);
+					if ((nowday < 1) || (nowday > maxday))
+					{
+						help1 = nowday = 1;
+						x1 = (float)((nowday + day - 1) % 7), y1 = (float)((nowday + day - 1) / 7);
+						zaplatsprite.setPosition(110 + x1 * 70, 275 + y1 * 50);
+						x1 = 110 + x1 * 70; y1 = 275 + y1 * 50;
+					}
+					Openfile(nowMonth,year,&data);
+					Clean(NotesMonth,100);
+					Clean(NotesDay,10);
+					Read(data, NotesMonth);
+					ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+					if (ntask==0) Clean(NotesDay,10);
+				}
+				if (flag == 2)
+				{
+					Transfer(NotesMonth,NotesDay);
+					Print(data,NotesMonth,nowMonth,year);
+					nowMonth++;
+					year += nowMonth / 12;
+					nowMonth = nowMonth % 12;
+					for (int i = 0; i < 301; i += 3)
+					{
+						messprite.setTextureRect(IntRect(nowMonth * 300 + i, 0, 300, 60));
+						window.draw(messprite);
+						window.display();
+						Sleep(1);
+					}
+					day = nday(nowMonth, &maxday);
+					nowday = checkday((int)x1, (int)y1, day);
+					if ((nowday < 1) || (nowday > maxday))
+					{
+						help1 = nowday = 1;
+						x1 = (float)((nowday + day - 1) % 7), y1 = (float)((nowday + day - 1) / 7);
+						zaplatsprite.setPosition(110 + x1 * 70, 275 + y1 * 50);
+						x1 = 110 + x1 * 70; y1 = 275 + y1 * 50;
+					}
+					Openfile(nowMonth,year,&data);
+					Clean(NotesMonth,100);
+					Clean(NotesDay,10);
+					Read(data, NotesMonth);
+					ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+					if(ntask==0) Clean(NotesDay,10);
+				}
+				if (flag == 3)
+				{
+					nowday = checkday((int)x0, (int)y0, day);
+					if ((nowday < 1) || (nowday > maxday)) nowday = checkday((int)x1, (int)y1, day);
+					else
+					{
+						x0 = (float)((nowday + day - 1) % 7), y0 = (float)((nowday + day - 1) / 7);
+						zaplatsprite.setPosition(110 + x0 * 70, 275 + y0 * 50);
+						x1 = 110 + x0 * 70; y1 = 275 + y0 * 50;
+						if (help1 == nowday)
+						{
+							pole = 1;
+						}
+						else
+						{
+							help1 = nowday;
+						}
+					}
+					ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+					if (ntask==0) Clean(NotesDay,10);
+				}
+				window.clear();
+				window.draw(fonsprite);
+				window.draw(zaplatsprite);
+				i = 1, k = day;
+				x = (float)day, y = 0;
+				Text text("", font, 30);
+				text.setFillColor(sf::Color(225, 104, 57));
+				while (i <= maxday)
+				{
+					int u1 = i / 10;
+					int u2 = i % 10;
+					char u3[3];
+					u3[2] = '\0';
+					if (u1 == 0)
+					{
+						u3[1] = '\0';
+						u3[0] = u2 + 48;
 					}
 					else
 					{
-						help1 = nowday;
+						u3[1] = u2 + 48;
+						u3[0] = u1 + 48;
 					}
+					text.setString(u3);
+					text.setPosition(115 + x * 70, 275 + y * 50);
+					k++;
+					x = (float)(k % 7);
+					y = (float)(k / 7);
+					window.draw(text);
+					i++;
 				}
-				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
-				if (ntask==0) Clean(NotesDay,10);
-			}
-			window.clear();
-			window.draw(fonsprite);
-			window.draw(zaplatsprite);
-			i = 1, k = day;
-			x = (float)day, y = 0;
-			Text text("", font, 30);
-			text.setFillColor(sf::Color(225, 104, 57));
-			while (i <= maxday)
-			{
-				int u1 = i / 10;
-				int u2 = i % 10;
-				char u3[3];
-				u3[2] = '\0';
-				if (u1 == 0)
+				Text textstr("", font, 14);
+				textstr.setFillColor(sf::Color(225, 104, 57));
+				if (flag == 4)
+					flagtext = 0;
+				if (flagtext) 
 				{
-					u3[1] = '\0';
-					u3[0] = u2 + 48;
+					window.draw(textfonsprite);
+					ntaskp = counterp(NotesDay[namdertask]);
+					for (int i = 0; i < ntaskp; i++)
+					{
+						if (NotesDay[namdertask].n_text[i].t_metadata != 0)
+						{
+							if (flag == 6)
+							{
+								help = checktask(y0);
+								if (NotesDay[namdertask].n_text[help].t_metadata != 0)
+									if (help < ntaskp)
+									{
+										if (NotesDay[namdertask].n_text[help].t_metadata == 2)
+										{
+											NotesDay[namdertask].n_text[help].t_metadata = 1;
+										}
+										else
+										{
+											if((NotesDay[namdertask].n_text[help].t_metadata == 1)||(NotesDay[namdertask].n_text[help].t_metadata == 2))
+											NotesDay[namdertask].n_text[help].t_metadata = 2;
+										}
+									}
+							}
+							if (NotesDay[namdertask].n_text[i].t_metadata != 2)
+							{
+								textstr.setString(NotesDay[namdertask].n_text[i].t_text);
+								textstr.setFillColor(sf::Color(225, 104, 57));
+								if (i == 0)
+									textstr.setPosition(775, 125);
+								else
+									textstr.setPosition(790, 125 + i * 20);
+								galkasprite.setPosition(750, 125 + i * 20);
+								window.draw(textstr);
+								window.draw(galkasprite);
+							}
+							else
+							{
+								textstr.setString(NotesDay[namdertask].n_text[i].t_text);
+								textstr.setFillColor(sf::Color(129, 129, 129));
+								if (i == 0)
+									textstr.setPosition(775, 125);
+								else
+									textstr.setPosition(790, 125 + i * 20);
+								galka1sprite.setPosition(750, 125 + i * 20);
+								window.draw(textstr);
+								window.draw(galka1sprite);
+							}
+	
+						}
+					}
 				}
 				else
 				{
-					u3[1] = u2 + 48;
-					u3[0] = u1 + 48;
-				}
-				text.setString(u3);
-				text.setPosition(115 + x * 70, 275 + y * 50);
-				k++;
-				x = (float)(k % 7);
-				y = (float)(k / 7);
-				window.draw(text);
-				i++;
-			}
-			Text textstr("", font, 14);
-			textstr.setFillColor(sf::Color(225, 104, 57));
-			if (flag == 4)
-				flagtext = 0;
-			if (flagtext) 
-			{
-				window.draw(textfonsprite);
-				ntaskp = counterp(NotesDay[namdertask]);
-				for (int i = 0; i < ntaskp; i++)
-				{
-					if (NotesDay[namdertask].n_text[i].t_metadata != 0)
-					{
-						if (flag == 6)
+					for (int i = 0; i < ntask; i++)
+						if (NotesDay[i].n_text[0].t_metadata != 0)
 						{
-							help = checktask(y0);
-							if (NotesDay[namdertask].n_text[help].t_metadata != 0)
-								if (help < ntaskp)
+							if (NotesDay[i].n_text[0].t_metadata != 2)
+							{
+								textstr.setString(NotesDay[i].n_text[0].t_text);
+								textstr.setFillColor(sf::Color(225, 104, 57));
+								textstr.setPosition(775, 125 + i * 20);
+								galkasprite.setPosition(750, 125 + i * 20);
+								window.draw(textstr);
+								window.draw(galkasprite);
+							}
+							else
+							{
+								textstr.setString(NotesDay[i].n_text[0].t_text);
+								textstr.setFillColor(sf::Color(129, 129, 129));
+								textstr.setPosition(775, 125 + i * 20);
+								galka1sprite.setPosition(750, 125 + i * 20);
+								window.draw(textstr);
+								window.draw(galka1sprite);
+							}
+	
+							if (flag == 5)
+							{
+								if (checktask(y0) < ntask)
 								{
-									if (NotesDay[namdertask].n_text[help].t_metadata == 2)
-									{
-										NotesDay[namdertask].n_text[help].t_metadata = 1;
-									}
-									else
-									{
-										if((NotesDay[namdertask].n_text[help].t_metadata == 1)||(NotesDay[namdertask].n_text[help].t_metadata == 2))
-										NotesDay[namdertask].n_text[help].t_metadata = 2;
-									}
+									namdertask = checktask(y0);
+									flagtext = 1;
 								}
+							}
 						}
-						if (NotesDay[namdertask].n_text[i].t_metadata != 2)
-						{
-							textstr.setString(NotesDay[namdertask].n_text[i].t_text);
-							textstr.setFillColor(sf::Color(225, 104, 57));
-							if (i == 0)
-								textstr.setPosition(775, 125);
-							else
-								textstr.setPosition(790, 125 + i * 20);
-							galkasprite.setPosition(750, 125 + i * 20);
-							window.draw(textstr);
-							window.draw(galkasprite);
-						}
-						else
-						{
-							textstr.setString(NotesDay[namdertask].n_text[i].t_text);
-							textstr.setFillColor(sf::Color(129, 129, 129));
-							if (i == 0)
-								textstr.setPosition(775, 125);
-							else
-								textstr.setPosition(790, 125 + i * 20);
-							galka1sprite.setPosition(750, 125 + i * 20);
-							window.draw(textstr);
-							window.draw(galka1sprite);
-						}
-
-					}
 				}
+				Sleep(100);
+				window.draw(messprite);
+				window.display();
 			}
 			else
 			{
-				for (int i = 0; i < ntask; i++)
-					if (NotesDay[i].n_text[0].t_metadata != 0)
+				flag = checkstart2(x0, y0);
+				window.clear();
+				window.draw(fon2sprite);
+				if (flag == 3)
+				{
+					pole = 0;
+				}
+				m = (nowday + day - 1) / 7;
+				creatematriksday(matrday, maxday, day);
+				for (int i = 0; i < 7; i++)
+				{
+					if (matrday[m][i + 1] == nowday)
+						zaplatsprite.setPosition(405 + i * 70, 25);
+				}
+				window.draw(zaplatsprite);
+				if (flag == 1)
+				{
+					if (m > 0)
 					{
-						if (NotesDay[i].n_text[0].t_metadata != 2)
+						m--;
+						if (matrday[m][1] != 0)
+							nowday = matrday[m][1];
+						else nowday = matrday[m][7];
+						Transfer(NotesMonth,NotesDay);
+						ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+						if (ntask==0) Clean(NotesDay,10);
+					}
+				}
+				if (flag == 2)
+				{
+					if (m < ((maxday + day - 1) / 7))
+					{
+						m++;
+						if (matrday[m][1] != 0)
+							nowday = matrday[m][1];
+						else nowday = matrday[m][7];
+						Transfer(NotesMonth,NotesDay);
+						ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+						if (ntask==0) Clean(NotesDay,10);
+					}
+	
+				}
+				Text text("", font, 30);
+				text.setFillColor(sf::Color(225, 104, 57));
+				for (int i = 0; i < 7; i++)
+				{
+					if (matrday[m][i + 1] != 0)
+					{
+						int u1 = matrday[m][i + 1] / 10;
+						int u2 = matrday[m][i + 1] % 10;
+						char u3[3];
+						u3[2] = '\0';
+						if (u1 == 0)
 						{
-							textstr.setString(NotesDay[i].n_text[0].t_text);
-							textstr.setFillColor(sf::Color(225, 104, 57));
-							textstr.setPosition(775, 125 + i * 20);
-							galkasprite.setPosition(750, 125 + i * 20);
-							window.draw(textstr);
-							window.draw(galkasprite);
+							u3[1] = '\0';
+							u3[0] = u2 + 48;
 						}
 						else
 						{
-							textstr.setString(NotesDay[i].n_text[0].t_text);
-							textstr.setFillColor(sf::Color(129, 129, 129));
-							textstr.setPosition(775, 125 + i * 20);
-							galka1sprite.setPosition(750, 125 + i * 20);
-							window.draw(textstr);
-							window.draw(galka1sprite);
+							u3[1] = u2 + 48;
+							u3[0] = u1 + 48;
 						}
-
-						if (flag == 5)
-						{
-							if (checktask(y0) < ntask)
-							{
-								namdertask = checktask(y0);
-								flagtext = 1;
-							}
-						}
+						text.setString(u3);
+						text.setPosition(405 + i * 70, 25);
+						window.draw(text);
 					}
+				}
 			}
-			Sleep(100);
-			window.draw(messprite);
-			window.display();
-		}
-		}
 	}
 	return 0;
 }
