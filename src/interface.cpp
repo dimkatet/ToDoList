@@ -201,6 +201,100 @@ int main()
 				window.draw(text);
 				i++;
 			}
+			Text textstr("", font, 14);
+			textstr.setFillColor(sf::Color(225, 104, 57));
+			if (flag == 4)
+				flagtext = 0;
+			if (flagtext) 
+			{
+				window.draw(textfonsprite);
+				ntaskp = counterp(NotesDay[namdertask]);
+				for (int i = 0; i < ntaskp; i++)
+				{
+					if (NotesDay[namdertask].n_text[i].t_metadata != 0)
+					{
+						if (flag == 6)
+						{
+							help = checktask(y0);
+							if (NotesDay[namdertask].n_text[help].t_metadata != 0)
+								if (help < ntaskp)
+								{
+									if (NotesDay[namdertask].n_text[help].t_metadata == 2)
+									{
+										NotesDay[namdertask].n_text[help].t_metadata = 1;
+									}
+									else
+									{
+										NotesDay[namdertask].n_text[help].t_metadata = 2;
+									}
+								}
+						}
+						if (NotesDay[namdertask].n_text[i].t_metadata != 2)
+						{
+							textstr.setString(NotesDay[namdertask].n_text[i].t_text);
+							textstr.setFillColor(sf::Color(225, 104, 57));
+							if (i == 0)
+								textstr.setPosition(775, 125);
+							else
+								textstr.setPosition(790, 125 + i * 20);
+							galkasprite.setPosition(750, 125 + i * 20);
+							window.draw(textstr);
+							window.draw(galkasprite);
+						}
+						else
+						{
+							textstr.setString(NotesDay[namdertask].n_text[i].t_text);
+							textstr.setFillColor(sf::Color(129, 129, 129));
+							if (i == 0)
+								textstr.setPosition(775, 125);
+							else
+								textstr.setPosition(790, 125 + i * 20);
+							galka1sprite.setPosition(750, 125 + i * 20);
+							window.draw(textstr);
+							window.draw(galka1sprite);
+						}
+
+					}
+				}
+			}
+			else
+			{
+				for (int i = 0; i < ntask; i++)
+					if (NotesDay[i].n_text[0].t_metadata != 0)
+					{
+						if (NotesDay[i].n_text[0].t_metadata != 2)
+						{
+							textstr.setString(NotesDay[i].n_text[0].t_text);
+							textstr.setFillColor(sf::Color(225, 104, 57));
+							textstr.setPosition(775, 125 + i * 20);
+							galkasprite.setPosition(750, 125 + i * 20);
+							window.draw(textstr);
+							window.draw(galkasprite);
+						}
+						else
+						{
+							textstr.setString(NotesDay[i].n_text[0].t_text);
+							textstr.setFillColor(sf::Color(129, 129, 129));
+							textstr.setPosition(775, 125 + i * 20);
+							galka1sprite.setPosition(750, 125 + i * 20);
+							window.draw(textstr);
+							window.draw(galka1sprite);
+						}
+
+						if (flag == 5)
+						{
+							if (checktask(y0) < ntask)
+							{
+								namdertask = checktask(y0);
+								flagtext = 1;
+							}
+						}
+					}
+			}
+			Sleep(100);
+			window.draw(messprite);
+			window.display();
+		}
 		}
 	}
 	return 0;
