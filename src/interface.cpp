@@ -318,7 +318,7 @@ int main()
 					pole = 0;
 				}
 				m = (nowday + day - 1) / 7;
-				creatematriksday(matrday, maxday, day);
+				CreateMatriksDay(matrday, maxday, day);
 				for (int i = 0; i < 7; i++)
 				{
 					if (matrday[m][i + 1] == nowday)
@@ -377,6 +377,120 @@ int main()
 						window.draw(text);
 					}
 				}
+				if (flag == 4)
+			{
+				Transfer(NotesMonth,NotesDay);
+				if (matrday[m][((x0 - 405) / 70) + 1] != 0)
+					nowday = matrday[m][((x0 - 405) / 70) + 1];
+				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+				if (ntask==0) Clean(NotesDay,10);
+			}
+			Text textstr("", font, 14);
+				textstr.setFillColor(sf::Color(225, 104, 57));
+				ntaskp = counterp(NotesDay[namdertask]);
+				for (int i = 0; i < ntaskp; i++)
+				{
+					if (NotesDay[namdertask].n_text[i].t_metadata != 0)
+					{
+						if (flag == 6)
+						{
+							help = (y0 - 150) / 20;
+							if (NotesDay[namdertask].n_text[help].t_metadata != 0)
+								if (help < ntaskp)
+								{
+									if (NotesDay[namdertask].n_text[help].t_metadata == 2)
+									{
+										NotesDay[namdertask].n_text[help].t_metadata = 1;
+									}
+									else
+									if ((NotesDay[namdertask].n_text[help].t_metadata == 1)|| (NotesDay[namdertask].n_text[help].t_metadata == 3))
+									{
+										NotesDay[namdertask].n_text[help].t_metadata = 2;
+									}
+								}
+						}
+						if (flag == 10)
+						{
+							help = (y0 - 150) / 20;
+							if (help < ntask)
+								if (NotesDay[help].n_text[0].t_metadata != 0)
+								{
+									if (NotesDay[help].n_text[0].t_metadata == 3)
+									{
+										NotesDay[help].n_text[0].t_metadata = 1;
+									}
+									else
+										if ((NotesDay[help].n_text[0].t_metadata == 1) || (NotesDay[help].n_text[0].t_metadata == 2))
+										{
+											NotesDay[help].n_text[0].t_metadata = 3;
+										}
+								}
+
+						}
+						if (NotesDay[namdertask].n_text[i].t_metadata != 2)
+						{
+							textstr.setString(NotesDay[namdertask].n_text[i].t_text);
+							textstr.setFillColor(sf::Color(225, 104, 57));
+							if (i == 0)
+								textstr.setPosition(685, 150);
+							else
+								textstr.setPosition(700, 150 + i * 20);
+							galkasprite.setPosition(660, 150 + i * 20);
+							basketsprite.setPosition(1200, 150 + i * 20);
+							window.draw(textstr);
+							window.draw(basketsprite);
+							window.draw(galkasprite);
+						}
+						else
+						{
+							textstr.setString(NotesDay[namdertask].n_text[i].t_text);
+							textstr.setFillColor(sf::Color(129, 129, 129));
+							if (i == 0)
+								textstr.setPosition(685, 150);
+							else
+								textstr.setPosition(700, 150 + i * 20);
+							galka1sprite.setPosition(660, 150 + i * 20);
+							basketsprite.setPosition(1200, 150 + i * 20);
+							window.draw(textstr);
+							window.draw(basketsprite);
+							window.draw(galka1sprite);
+						}
+					}
+				}
+				for (int i = 0; i < ntask; i++)
+					if (NotesDay[i].n_text[0].t_metadata != 0)
+					{
+						if (NotesDay[i].n_text[0].t_metadata != 2)
+						{
+							textstr.setString(NotesDay[i].n_text[0].t_text);
+							textstr.setFillColor(sf::Color(225, 104, 57));
+							textstr.setPosition(125, 150 + i * 20);
+							galkasprite.setPosition(100, 150 + i * 20);
+							if (NotesDay[i].n_text[0].t_metadata == 3)
+							{
+								exclaimsprite.setPosition(80, 150 + i * 20);
+								window.draw(exclaimsprite);
+							}
+							else
+							{
+								notexclaimsprite.setPosition(80, 150 + i * 20);
+								window.draw(notexclaimsprite);
+							}
+							window.draw(textstr);
+							window.draw(galkasprite);
+						}
+						else
+						{
+							textstr.setString(NotesDay[i].n_text[0].t_text);
+							textstr.setFillColor(sf::Color(129, 129, 129));
+							textstr.setPosition(125, 150 + i * 20);
+							notexclaimsprite.setPosition(80, 150 + i * 20);
+							galka1sprite.setPosition(100, 150 + i * 20);
+							window.draw(textstr);
+							window.draw(galka1sprite);
+							window.draw(notexclaimsprite);
+						}
+					}
 			}
 	}
 	return 0;
