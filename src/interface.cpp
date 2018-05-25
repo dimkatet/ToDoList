@@ -8,7 +8,11 @@
 using namespace sf;
 int main()
 {
-	int x0=0,y0=0;
+	struct Note *NotesDay = new Note [10], *NotesMonth = new Note [300];
+	int nowMonth = 0, year = 2018, day, maxday, nowday; 
+	FILE *data = 0;
+	int x0=0,y0=0,flag=0,pole = 0, help1,ntask,ntaskp;
+	float x, y, x1, y1;
 	RenderWindow window(VideoMode(1300, 700), "To-do");
 	
 	Image fon;
@@ -31,7 +35,7 @@ int main()
 	mestexture.loadFromImage(mes);
 	Sprite messprite;
 	messprite.setTexture(mestexture);
-	messprite.setTextureRect(IntRect(xmonth *300+300, 0, 300, 60));
+	messprite.setTextureRect(IntRect(nowMonth *300+300, 0, 300, 60));
 	messprite.setPosition(200, 95);
 	
 	Image textfon;
@@ -63,9 +67,12 @@ int main()
 	Sprite zaplatsprite;
 	zaplatsprite.setTexture(zaplattexture);
 	zaplatsprite.setTextureRect(IntRect(0, 0,70,50));
+	
+	Font font;
+	font.loadFromFile("font.ttf");
 
 	while (window.isOpen())
-	{
+	{	flag = 0; x0 = 0; y0 = 0; help = 0;
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
@@ -78,6 +85,71 @@ int main()
 				x0 = (float)pikspos.x;
 				y0 = (float)pikspos.y;
 			}
+			if (!pole)
+		{
+			x = (float)((nowday + day - 1) % 7), y = (float)((nowday + day - 1) / 7);
+			zaplatsprite.setPosition(110 + x * 70, 275 + y * 50);
+			flag = checkstart(x0, y0);
+			if (flag == 1)
+			{
+				Transfer(NotesMonth,NotesDay);
+				Print(data,NotesMonth,nowMonth,year);
+				if (nowMonth == 0) { nowMonth = 11;	year--; }
+				else  nowMonth--;
+				for (int i = 0; i < 301; i += 3)
+				{
+					messprite.setTextureRect(IntRect(nowMonth * 300 + 600 - i, 0, 300, 60));
+					window.draw(messprite);
+					window.display();
+					Sleep(1);
+				}
+				day = nday(nowMonth, &maxday);
+				nowday = checkday((int)x1, (int)y1, day);
+				if ((nowday < 1) || (nowday > maxday))
+				{
+					help1 = nowday = 1;
+					x1 = (float)((nowday + day - 1) % 7), y1 = (float)((nowday + day - 1) / 7);
+					zaplatsprite.setPosition(110 + x1 * 70, 275 + y1 * 50);
+					x1 = 110 + x1 * 70; y1 = 275 + y1 * 50;
+				}
+				Openfile(nowMonth,year,&data);
+				Clean(NotesMonth,100);
+				Clean(NotesDay,10);
+				Read(data, NotesMonth);
+				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+				if (ntask==0) Clean(NotesDay,10);
+			}
+			if (flag == 2)
+			{
+				Transfer(NotesMonth,NotesDay);
+				Print(data,NotesMonth,nowMonth,year);
+				nowMonth++;
+				year += nowMonth / 12;
+				nowMonth = nowMonth % 12;
+				for (int i = 0; i < 301; i += 3)
+				{
+					messprite.setTextureRect(IntRect(nowMonth * 300 + i, 0, 300, 60));
+					window.draw(messprite);
+					window.display();
+					Sleep(1);
+				}
+				day = nday(nowMonth, &maxday);
+				nowday = checkday((int)x1, (int)y1, day);
+				if ((nowday < 1) || (nowday > maxday))
+				{
+					help1 = nowday = 1;
+					x1 = (float)((nowday + day - 1) % 7), y1 = (float)((nowday + day - 1) / 7);
+					zaplatsprite.setPosition(110 + x1 * 70, 275 + y1 * 50);
+					x1 = 110 + x1 * 70; y1 = 275 + y1 * 50;
+				}
+				Openfile(nowMonth,year,&data);
+				Clean(NotesMonth,100);
+				Clean(NotesDay,10);
+				Read(data, NotesMonth);
+				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+				if(ntask==0) Clean(NotesDay,10);
+			}
+		}
 	}
 	return 0;
 }
