@@ -4,6 +4,13 @@
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
+#include <SFML/Graphics.hpp>
+#include <iostream> 
+#include <windows.h>
+#include <tchar.h>
+#include<sstream>
+#include<conio.h>
+#include<string.h>
 struct text{
 	char t_text[60];
 	int t_metadata;
