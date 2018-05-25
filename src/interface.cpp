@@ -1,13 +1,12 @@
+#include"sdafx.hpp"
 #include"checkclisk.hpp"
-#include <SFML/Graphics.hpp>
-#include <iostream> 
-#include <windows.h>
-#include <stdio.h>
-#include <tchar.h>
-#include<sstream>
+#include"read.hpp"
+#include"write.hpp"
+#include"edit.hpp"
+#include"score.hpp"
 
 using namespace sf;
-int main()
+int interface()
 {
 	struct Note *NotesDay = new Note [10], *NotesMonth = new Note [300];
 	int nowMonth = 0, year = 2018, day, maxday, nowday; 
@@ -378,14 +377,14 @@ int main()
 					}
 				}
 				if (flag == 4)
-			{
-				Transfer(NotesMonth,NotesDay);
-				if (matrday[m][((x0 - 405) / 70) + 1] != 0)
-					nowday = matrday[m][((x0 - 405) / 70) + 1];
-				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
-				if (ntask==0) Clean(NotesDay,10);
-			}
-			Text textstr("", font, 14);
+				{
+					Transfer(NotesMonth,NotesDay);
+					if (matrday[m][((x0 - 405) / 70) + 1] != 0)
+						nowday = matrday[m][((x0 - 405) / 70) + 1];
+					ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+					if (ntask==0) Clean(NotesDay,10);
+				}
+				Text textstr("", font, 14);
 				textstr.setFillColor(sf::Color(225, 104, 57));
 				ntaskp = counterp(NotesDay[namdertask]);
 				for (int i = 0; i < ntaskp; i++)
@@ -456,8 +455,7 @@ int main()
 							window.draw(galka1sprite);
 						}
 					}
-				}
-				for (int i = 0; i < ntask; i++)
+					for (int i = 0; i < ntask; i++)
 					if (NotesDay[i].n_text[0].t_metadata != 0)
 					{
 						if (NotesDay[i].n_text[0].t_metadata != 2)
@@ -491,8 +489,159 @@ int main()
 							window.draw(notexclaimsprite);
 						}
 					}
-			}
+					if (flag == 7)
+					{
+						Sleep(50);
+						if (ntask < 10)
+						{
+							printf("%d\n",mtask);
+							ntask++;
+							NotesDay[ntask-1].n_text[0].t_metadata = 1;
+							NotesDay[ntask-1].n_metadata = mtask;
+							NotesDay[ntask-1].n_data.tm_mday = nowday;
+							NotesDay[ntask-1].n_data.tm_mon = xmonth + 1;
+							NotesDay[ntask-1].n_data.tm_year = god;
+							mtask++;
+							flag5 = 0;
+							flag4 = 0;
+							flag3 = 1;
+							helpi = 0;
+							namdertask = ntask - 1;
+							ntaskp = counterp(NotesDay[namdertask]);
+							Transfer(NotesMonth,NotesDay);
+						}
+		
+					}
+					if (flag == 8)
+					{
+						Sleep(50);
+						if (ntaskp < 10)
+						{
+							ntaskp++;
+							NotesDay[namdertask].n_text[ntaskp-1].t_metadata = 1;
+							flag5 = 0;
+							flag4 = 1;
+							flag3 = 0;
+							helpi = 0;
+						}
+					}
+					if (flag4)
+					{
+						if (event.type == Event::TextEntered)
+						{
+		
+							if ((int)event.key.code == 13)
+							{
+								flag4 = 0;
+							}
+							else
+							{
+								if ((int)event.key.code == 8)
+								{
+									helpi--;
+									NotesDay[namdertask].n_text[ntaskp - 1].t_text[helpi] = '\0';
+		
+								}
+								else
+								{
+									NotesDay[namdertask].n_text[ntaskp - 1].t_text[helpi] = event.key.code;
+									NotesDay[namdertask].n_text[ntaskp - 1].t_text[helpi + 1] = '\0';
+									helpi++;
+								}
+							}
+							if (helpi > 40)
+								flag4 = 0;
+						}
+					}
+				if (flag3)
+				{
+					if (event.type == Event::TextEntered)
+					{
+		
+						if ((int)event.key.code ==13)
+						{
+							flag3 = 0;
+						}
+						else
+						{
+							if ((int)event.key.code == 8)
+							{
+								helpi--;
+								NotesDay[ntask - 1].n_text[0].t_text[helpi] = '\0';
+		
+							}
+							else
+							{
+								NotesDay[ntask - 1].n_text[0].t_text[helpi] = event.key.code;
+								NotesDay[ntask - 1].n_text[0].t_text[helpi + 1] = '\0';
+								helpi++;
+							}
+						}
+						if(helpi>40)
+							flag3 = 0;
+					}
+				}
+				if (flag == 9)
+				{
+					hpp = (y0 - 150) / 20;
+					helpi = strlen(NotesDay[namdertask].n_text[hpp].t_text);
+					flag5 = 1;
+					flag4 = 0;
+					flag3 = 0;
+				}
+				if (flag == 11)
+				{
+					help = (y0 - 150) / 20;
+					DeleteNote(NotesMonth,NotesDay[namdertask],mtask);
+					if(help<ntaskp)
+						if (help == 0)
+						{
+							NotesDay[namdertask] = NotesDay[ntask - 1];
+							for (int j = 0; j < 10; j++)
+							{
+								NotesDay[ntask - 1].n_text[j].t_metadata = 0;
+								NotesDay[ntask - 1].n_text[j].t_text[0] = '\0';
+							}
+								ntask--;
+								ntaskp = counterp(NotesDay[namdertask]);
+						}
+						else 
+						{
+							NotesDay[namdertask].n_text[help] = NotesDay[namdertask].n_text[ntaskp-1];
+							NotesDay[namdertask].n_text[ntaskp-1].t_metadata = 0;
+							NotesDay[namdertask].n_text[ntaskp-1].t_text[0] = '\0';
+								ntaskp--;
+						}
+				}
+				if (flag5)
+				{
+					if (event.type == Event::TextEntered)
+					{
+
+						if ((int)event.key.code == 13)
+						{
+							flag5 = 0;
+						}
+						else
+						{						
+							if ((int)event.key.code == 8)
+							{
+								helpi--;
+								NotesDay[namdertask].n_text[hpp].t_text[helpi] = '\0';
+							}
+							else
+							{
+								NotesDay[namdertask].n_text[hpp].t_text[helpi] = event.key.code;
+								NotesDay[namdertask].n_text[hpp].t_text[helpi + 1] = '\0';
+								helpi++;
+							}
+						}
+						if (helpi > 40)
+							flag5 = 0;
+					}
+					Sleep(100);
+					window.display();
+				}
 	}
 	return 0;
 }
-
