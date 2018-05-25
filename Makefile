@@ -38,6 +38,7 @@ build/src/write.o: src/write.cpp src/write.hpp
 	$(MKDIR_BUILD_SRC)
 	$(OBJ)
 
+
 build/src/read.o: src/read.cpp src/read.hpp
 	$(MKDIR_BUILD_SRC)
 	$(OBJ)
