@@ -16,3 +16,12 @@ void Clean(Note *Notes,int n)
 		}
 	}
 }
+void Transfer(Note *NotesMonth, Note *NotesDay)
+{
+	int i = 0;
+	while(NotesDay[i].n_text[0].t_metadata!=0)
+	{
+		NotesMonth[NotesDay[i].n_metadata] = NotesDay[i];
+		i++;
+	}
+}
