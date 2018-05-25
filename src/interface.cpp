@@ -1,3 +1,4 @@
+#include"checkclisk.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream> 
 #include <windows.h>
@@ -225,6 +226,7 @@ int main()
 									}
 									else
 									{
+										if((NotesDay[namdertask].n_text[help].t_metadata == 1)||(NotesDay[namdertask].n_text[help].t_metadata == 2))
 										NotesDay[namdertask].n_text[help].t_metadata = 2;
 									}
 								}
