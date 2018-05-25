@@ -4,6 +4,7 @@
 #include "read.hpp"
 #include "testing.hpp"
 #include "edit.hpp"
+#include "score.hpp"
 struct test_write: TestCase{
 	void run(){
 		Note *Notes = new Note [2];
@@ -99,7 +100,7 @@ struct test_transfer: TestCase{
 		ASSERT_EQUAL(NotesM[i+2].n_text[0].t_metadata, NotesD[i].n_text[0].t_metadata);
 	}
 };
-REGISTER_TEST(test_transfer, "trasder data");
+REGISTER_TEST(test_transfer, "Trasfer data");
 
 struct test_delete: TestCase{
 	void run(){
@@ -113,5 +114,30 @@ struct test_delete: TestCase{
 		ASSERT_EQUAL(12, NotesM[4].n_text[0].t_metadata);
 	}
 };
-REGISTER_TEST(test_delete, "delete note");
+REGISTER_TEST(test_delete, "Delete note");
 
+struct test_scoreD: TestCase{
+	void run(){
+		Note *NotesM = new Note [20], *NotesD = new Note [5];
+		int score = 0;
+		for(int i = 0; i <7; i++){
+			NotesM[i].n_text[0].t_metadata = 1;
+			if(i>1) NotesM[i].n_data.tm_mday = 5;
+		}
+		ScoreTask(NotesM,NotesD,&score,5);
+		ASSERT_EQUAL(5, score);
+	}
+};
+REGISTER_TEST(test_scoreD, "Score in day");
+
+struct test_scoreM: TestCase{
+	void run(){
+		Note *NotesM = new Note [20];
+		int score = 0;
+		for(int i = 0; i <7; i++)
+			NotesM[i].n_text[0].t_metadata = 1;
+		ScoreTaskMonth(NotesM,&score);
+		ASSERT_EQUAL(7, score);
+	}
+};
+REGISTER_TEST(test_scoreM, "Score in month");
