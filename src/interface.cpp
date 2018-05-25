@@ -11,7 +11,7 @@ int main()
 	struct Note *NotesDay = new Note [10], *NotesMonth = new Note [300];
 	int nowMonth = 0, year = 2018, day, maxday, nowday; 
 	FILE *data = 0;
-	int x0=0,y0=0,flag=0,pole = 0, help1,ntask,ntaskp;
+	int x0=0,y0=0,flag=0,pole = 0,namdertask = 1, help1,ntask,ntaskp,i = 1, k,help, help1;
 	float x, y, x1, y1;
 	RenderWindow window(VideoMode(1300, 700), "To-do");
 	
@@ -148,6 +148,58 @@ int main()
 				Read(data, NotesMonth);
 				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
 				if(ntask==0) Clean(NotesDay,10);
+			}
+			if (flag == 3)
+			{
+				nowday = checkday((int)x0, (int)y0, day);
+				if ((nowday < 1) || (nowday > maxday)) nowday = checkday((int)x1, (int)y1, day);
+				else
+				{
+					x0 = (float)((nowday + day - 1) % 7), y0 = (float)((nowday + day - 1) / 7);
+					zaplatsprite.setPosition(110 + x0 * 70, 275 + y0 * 50);
+					x1 = 110 + x0 * 70; y1 = 275 + y0 * 50;
+					if (help1 == nowday)
+					{
+						pole = 1;
+					}
+					else
+					{
+						help1 = nowday;
+					}
+				}
+				ScoreTask(NotesMonth,NotesDay, &ntask, nowday);
+				if (ntask==0) Clean(NotesDay,10);
+			}
+			window.clear();
+			window.draw(fonsprite);
+			window.draw(zaplatsprite);
+			i = 1, k = day;
+			x = (float)day, y = 0;
+			Text text("", font, 30);
+			text.setFillColor(sf::Color(225, 104, 57));
+			while (i <= maxday)
+			{
+				int u1 = i / 10;
+				int u2 = i % 10;
+				char u3[3];
+				u3[2] = '\0';
+				if (u1 == 0)
+				{
+					u3[1] = '\0';
+					u3[0] = u2 + 48;
+				}
+				else
+				{
+					u3[1] = u2 + 48;
+					u3[0] = u1 + 48;
+				}
+				text.setString(u3);
+				text.setPosition(115 + x * 70, 275 + y * 50);
+				k++;
+				x = (float)(k % 7);
+				y = (float)(k / 7);
+				window.draw(text);
+				i++;
 			}
 		}
 	}
