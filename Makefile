@@ -10,7 +10,7 @@ default: bin/Todo.exe
 test: bin/test.exe
 	$<
 
-bin/test.exe: build/test/main.o build/test/write.o build/test/read.o build/test/edit.o
+bin/test.exe: build/test/main.o build/test/write.o build/test/read.o build/test/edit.o build/test/score.o
 	mkdir -p bin
 	g++ $(CFLAGS) $^ -o $@
 
@@ -30,7 +30,11 @@ build/test/edit.o: src/edit.cpp src/edit.hpp
 	$(MKDIR_BUILD_SRC)
 	$(OBJ)
 
-bin/Todo.exe: build/src/main.o build/src/write.o build/src/read.o build/src/edit.o
+build/test/score.o: src/score.cpp src/score.hpp
+	$(MKDIR_BUILD_SRC)
+	$(OBJ)
+
+bin/Todo.exe: build/src/main.o build/src/write.o build/src/read.o build/src/edit.o build/src/score.o
 	mkdir -p bin
 	$(CC) $(CFLAGS) $^ -o $@
 
@@ -51,5 +55,9 @@ build/src/edit.o: src/edit.cpp src/edit.hpp
 	$(MKDIR_BUILD_SRC)
 	$(OBJ)
 
+
+build/src/score.o: src/score.cpp src/score.hpp
+	$(MKDIR_BUILD_SRC)
+	$(OBJ)
 clean:
 	rm -rf bin build 
