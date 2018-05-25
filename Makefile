@@ -10,7 +10,7 @@ default: bin/Todo.exe
 test: bin/test.exe
 	$<
 
-bin/test.exe: build/test/main.o build/test/write.o build/test/read.o
+bin/test.exe: build/test/main.o build/test/write.o build/test/read.o build/test/edit.o
 	mkdir -p bin
 	g++ $(CFLAGS) $^ -o $@
 
@@ -26,7 +26,11 @@ build/test/read.o: src/read.cpp src/read.hpp
 	$(MKDIR_BUILD_TEST)
 	$(OBJ)
 
-bin/Todo.exe: build/src/main.o build/src/write.o build/src/read.o
+build/test/edit.o: src/edit.cpp src/edit.hpp
+	$(MKDIR_BUILD_SRC)
+	$(OBJ)
+
+bin/Todo.exe: build/src/main.o build/src/write.o build/src/read.o build/src/edit.o
 	mkdir -p bin
 	$(CC) $(CFLAGS) $^ -o $@
 
@@ -40,6 +44,10 @@ build/src/write.o: src/write.cpp src/write.hpp
 
 
 build/src/read.o: src/read.cpp src/read.hpp
+	$(MKDIR_BUILD_SRC)
+	$(OBJ)
+
+build/src/edit.o: src/edit.cpp src/edit.hpp
 	$(MKDIR_BUILD_SRC)
 	$(OBJ)
 
