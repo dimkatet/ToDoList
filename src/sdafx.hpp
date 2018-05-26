@@ -6,10 +6,10 @@
 #include <cstdio>
 #include <SFML/Graphics.hpp>
 #include <iostream> 
-#include <windows.h>
-#include <tchar.h>
-#include<sstream>
-#include<conio.h>
+//#include <windows.h>
+//#include <tchar.h>
+//#include<sstream>
+//#include<conio.h>
 #include<string.h>
 struct text{
 	char t_text[60];

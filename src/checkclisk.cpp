@@ -1,4 +1,4 @@
-#include"stdafx.hpp"
+#include"sdafx.hpp"
 #include"checkclisk.hpp"
 int checkstart(float x, float y)
 {
@@ -46,10 +46,12 @@ int checkstart2(float x, float y)
 }
 void nowdate(int *nowday, int *xmonth)
 {
-	SYSTEMTIME st;
-	GetSystemTime(&st);
-	*nowday = st.wDay;
-	*xmonth = st.wMonth - 1;
+	time_t t;
+	struct tm *t_m;
+	t=time(NULL);
+	t_m=localtime(&t);
+	*nowday = t_m->tm_mday;
+	*xmonth = t_m->tm_mon; 
 }
 int nday(int month,int *maxday)
 {
@@ -71,3 +73,12 @@ int nday(int month,int *maxday)
 	}
 	return 0;
 } 
+int counterp(Note p) 
+{ 
+int i = 0; 
+while (p.n_text[i].t_metadata != 0) 
+{ 
+i++; 
+} 
+return i; 
+}

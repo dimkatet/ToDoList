@@ -1,8 +1,7 @@
-#include"stdafx.hpp"
-#include "interface.cpp"
-main()
+#include"sdafx.hpp"
+#include "interface.hpp"
+int main()
 {
 	interface();
 	return 0;
 }
-
