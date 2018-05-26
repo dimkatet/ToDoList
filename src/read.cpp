@@ -9,6 +9,11 @@ void Openfile (int mon, int year, FILE **list0)
 	p[11] = year%10 + 48;
 	p[16] = '\0';
 	*list0 = fopen(p,"r");
+	if (*list0 == NULL){
+		*list0 = fopen(p,"w");
+		fclose(*list0);
+		*list0 = fopen(p,"r");
+	}
 }
 void Read(FILE *of, Note *Notes)
 {
